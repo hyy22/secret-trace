@@ -1,0 +1,42 @@
+services:
+  redis:
+    image: redis:7.2.4
+    container_name: secret_trace_redis
+    restart: unless-stopped
+    volumes:
+      - $HOME/dockerdata/secret_trace/data/redis/conf:/usr/local/etc/redis
+      - $HOME/dockerdata/secret_trace/data/redis/data:/data
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - secret_trace
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_URL=file:../db/prod.db
+    container_name: secret_trace_app
+    restart: unless-stopped
+    volumes:
+      - $HOME/dockerdata/secret_trace/data/db:/app/db
+      - $HOME/dockerdata/secret_trace/data/logs:/app/logs
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_HOST=https://demo.secret-trace.com
+      - DATABASE_URL=file:/app/db/prod.db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - TZ=Asia/Shanghai
+    networks:
+      - secret_trace
+    depends_on:
+      - redis
+    
+networks:
+    secret_trace:
+      external: false

@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "sqlite"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Msg {
+  id             Int       @id @default(autoincrement())
+  hash           String    @unique
+  // "0: text, 1: file"
+  type           Int       @default(0)
+  content        String
+  viewCount      Int       @default(0)
+  // "0: after read, 1: after send minutes"
+  destroyType    Int       @default(0)
+  destroyMinutes Int       @default(0)
+  secret         String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+  destroyedAt    DateTime?
+}
+
+model Hash {
+  id        Int     @id @default(autoincrement())
+  hash      String  @unique
+  used      Boolean @default(false)
+  isDeleted Boolean @default(false)
+}

@@ -1,0 +1,7 @@
+/node_modules
+/db
+/.next
+/logs
+/.git
+.env*
+README.md
