@@ -8,7 +8,7 @@ const connection: ConnectionOptions = {
   port: REDIS_PORT,
   password: REDIS_PASSWORD,
 }
-const queue = new Queue('msg-queue', { connection });
+const queue = new Queue('msg-queue', { connection, prefix: 'secret-trace' });
 // 处理任务
 new Worker('msg-queue', async (job) => {
   switch (job.name) {
