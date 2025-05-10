@@ -13,7 +13,7 @@ export default function CopyText({ text }: { text: string }) {
     }, 2000);
   };
   return <div className="flex items-center justify-between p-5 border border-dashed border-silver rounded-md bg-opacity-5 bg-blue-500">
-    <p className="text-blue-500 text-base">{text}</p>
+    <p className="text-blue-500 text-base whitespace-pre-wrap">{text}</p>
     <Button variant="outline" onClick={copyToClipboard} className="ml-2">
       {copied ? "Copied!" : "Copy"}
     </Button>
